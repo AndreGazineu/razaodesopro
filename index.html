@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BUR e DDR | Filme Soprado</title>
+  <style>
+    :root {
+      --ink: #101322;
+      --paper: #fff6c9;
+      --panel: rgba(255, 248, 211, 0.92);
+      --panel-strong: #fff0a3;
+      --blue: #1ea7ff;
+      --blue-dark: #1c4fd7;
+      --pink: #ff3fa4;
+      --orange: #ff9f1c;
+      --yellow: #ffe156;
+      --green: #32d583;
+      --lime: #a6ff4d;
+      --purple: #7447ff;
+      --red: #ff334e;
+      --brown: #7a4f2a;
+      --shadow: 8px 8px 0 rgba(16, 19, 34, 0.95);
+      --small-shadow: 4px 4px 0 rgba(16, 19, 34, 0.95);
+      --radius: 22px;
+      --grid: rgba(16, 19, 34, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255, 225, 86, 0.95) 0 0.9rem, transparent 0.95rem),
+        radial-gradient(circle at 82% 28%, rgba(255, 63, 164, 0.75) 0 1.1rem, transparent 1.15rem),
+        radial-gradient(circle at 70% 82%, rgba(30, 167, 255, 0.75) 0 1.4rem, transparent 1.45rem),
+        linear-gradient(135deg, #ffb703 0%, #ff6f59 28%, #38b000 55%, #00b4d8 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.04) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.02), rgba(0,0,255,0.03));
+      background-size: 100% 4px, 8px 100%;
+      mix-blend-mode: multiply;
+      opacity: 0.42;
+      z-index: 50;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 0 55%, rgba(0,0,0,0.22) 100%);
+      z-index: 51;
+    }
+
+    .world {
+      position: relative;
+      min-height: 100vh;
+      padding: 22px;
+      isolation: isolate;
+    }
+
+    .sky-grid {
+      position: fixed;
+      inset: 0;
+      opacity: 0.26;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid) 2px, transparent 2px),
+        linear-gradient(90deg, var(--grid) 2px, transparent 2px);
+      background-size: 72px 72px;
+      transform: perspective(500px) rotateX(58deg) scale(1.25);
+      transform-origin: center bottom;
+      animation: gridDrift 15s linear infinite;
+      z-index: -3;
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 0 144px, 144px 0; }
+    }
+
+    .sun-disc {
+      position: fixed;
+      right: min(7vw, 80px);
+      top: 56px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 5px solid var(--ink);
+      background:
+        repeating-linear-gradient(0deg, transparent 0 14px, rgba(16,19,34,0.22) 14px 18px),
+        linear-gradient(#ffe156, #ff9f1c 48%, #ff3fa4);
+      box-shadow: var(--shadow);
+      z-index: -2;
+      animation: pulseSun 4s ease-in-out infinite;
+    }
+
+    @keyframes pulseSun {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.04) rotate(2deg); }
+    }
+
+    .leaf {
+      position: fixed;
+      width: 120px;
+      height: 40px;
+      border: 4px solid var(--ink);
+      border-radius: 100% 0 100% 0;
+      background: linear-gradient(135deg, var(--lime), var(--green));
+      box-shadow: var(--small-shadow);
+      z-index: -1;
+      opacity: 0.86;
+      transform-origin: 10% 70%;
+      animation: leafSway 5s ease-in-out infinite;
+    }
+
+    .leaf::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 8px;
+      width: 92px;
+      height: 4px;
+      background: var(--ink);
+      transform: rotate(-12deg);
+      border-radius: 4px;
+    }
+
+    @keyframes leafSway {
+      0%,100% { transform: rotate(var(--r)) translateY(0); }
+      50% { transform: rotate(calc(var(--r) + 10deg)) translateY(-10px); }
+    }
+    .leaf-1 { left: 4%; top: 8%; --r: -18deg; animation-delay: -0.35s; }
+    .leaf-2 { left: 10%; top: 78%; --r: 24deg; animation-delay: -0.7s; }
+    .leaf-3 { left: 78%; top: 13%; --r: 42deg; animation-delay: -1.0499999999999998s; }
+    .leaf-4 { left: 86%; top: 70%; --r: -32deg; animation-delay: -1.4s; }
+    .leaf-5 { left: 2%; top: 48%; --r: 58deg; animation-delay: -1.75s; }
+    .leaf-6 { left: 92%; top: 36%; --r: -65deg; animation-delay: -2.0999999999999996s; }
+    .leaf-7 { left: 22%; top: 92%; --r: 15deg; animation-delay: -2.4499999999999997s; }
+    .leaf-8 { left: 62%; top: 90%; --r: -12deg; animation-delay: -2.8s; }
+    .leaf-9 { left: 44%; top: 4%; --r: 75deg; animation-delay: -3.15s; }
+    .leaf-10 { left: 73%; top: 55%; --r: 8deg; animation-delay: -3.5s; }
+    .leaf-11 { left: 30%; top: 22%; --r: -55deg; animation-delay: -3.8499999999999996s; }
+    .leaf-12 { left: 50%; top: 75%; --r: 38deg; animation-delay: -4.199999999999999s; }
+
+    .main-shell {
+      width: min(1180px, calc(100vw - 44px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      position: relative;
+      margin: 28px 0 22px;
+      padding: 28px;
+      border: 6px solid var(--ink);
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 10% 18%, rgba(255,255,255,0.78), transparent 12%),
+        radial-gradient(circle at 90% 18%, rgba(255,225,86,0.75), transparent 16%),
+        linear-gradient(135deg, rgba(255,246,201,0.96), rgba(255,240,163,0.91));
+      box-shadow: 12px 12px 0 var(--ink);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0 34%, rgba(255,255,255,0.35) 34% 40%, transparent 40% 100%),
+        repeating-linear-gradient(135deg, transparent 0 18px, rgba(16,19,34,0.045) 18px 21px);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 4px solid var(--ink);
+      border-radius: 999px;
+      background: var(--lime);
+      box-shadow: var(--small-shadow);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+
+    .kicker-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 3px solid var(--ink);
+      background: var(--pink);
+      animation: blinkDot 1s steps(2, start) infinite;
+    }
+
+    @keyframes blinkDot {
+      0%, 45% { opacity: 1; }
+      46%, 100% { opacity: 0.35; }
+    }
+
+    h1 {
+      margin: 20px 0 12px;
+      font-size: clamp(42px, 7vw, 92px);
+      line-height: 0.88;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+      text-shadow:
+        4px 4px 0 var(--yellow),
+        8px 8px 0 var(--blue),
+        12px 12px 0 rgba(16,19,34,0.95);
+    }
+
+    .hero p {
+      max-width: 720px;
+      font-size: 18px;
+      line-height: 1.45;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .console {
+      position: relative;
+      border: 6px solid var(--ink);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.8), transparent 20%),
+        linear-gradient(145deg, #6df8ff, #2d7cff 52%, #7447ff);
+      box-shadow: 10px 10px 0 var(--ink);
+      min-height: 270px;
+      overflow: hidden;
+      transform: rotate(1deg);
+    }
+
+    .console::before {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border: 5px solid var(--ink);
+      border-radius: 50%;
+      right: 28px;
+      top: 28px;
+      background:
+        radial-gradient(circle at 50% 50%, var(--pink) 0 18px, var(--ink) 19px 24px, transparent 25px),
+        conic-gradient(var(--yellow), var(--green), var(--blue), var(--pink), var(--yellow));
+      animation: rotateDial 8s linear infinite;
+    }
+
+    @keyframes rotateDial {
+      to { transform: rotate(360deg); }
+    }
+
+    .console-screen {
+      position: absolute;
+      left: 24px;
+      top: 28px;
+      right: 172px;
+      height: 132px;
+      border: 5px solid var(--ink);
+      border-radius: 18px;
+      background:
+        linear-gradient(rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.12) 50%),
+        radial-gradient(circle at 35% 45%, #fff 0 8px, transparent 9px),
+        linear-gradient(180deg, #14213d, #0b1020);
+      background-size: 100% 6px, auto, auto;
+      color: var(--lime);
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.45;
+      box-shadow: inset 0 0 22px rgba(166,255,77,0.25);
+    }
+
+    .console-buttons {
+      position: absolute;
+      left: 28px;
+      bottom: 26px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .button-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 4px solid var(--ink);
+      box-shadow: var(--small-shadow);
+    }
+
+    .button-dot:nth-child(1) { background: var(--red); }
+    .button-dot:nth-child(2) { background: var(--yellow); }
+    .button-dot:nth-child(3) { background: var(--green); }
+    .button-dot:nth-child(4) { background: var(--pink); }
+
+    .antenna {
+      position: absolute;
+      right: 48px;
+      bottom: 24px;
+      width: 76px;
+      height: 92px;
+      border: 5px solid var(--ink);
+      border-radius: 40px 40px 16px 16px;
+      background: linear-gradient(180deg, #fff, #ffe156);
+    }
+
+    .antenna::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -72px;
+      width: 8px;
+      height: 74px;
+      background: var(--ink);
+      transform: translateX(-50%) rotate(-12deg);
+      transform-origin: bottom;
+    }
+
+    .antenna::after {
+      content: '';
+      position: absolute;
+      left: 38px;
+      top: -86px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 4px solid var(--ink);
+      background: var(--pink);
+      animation: ping 1.2s infinite ease-in-out;
+    }
+
+    @keyframes ping {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 0.86fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 5px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 12px 12px, rgba(16,19,34,0.12) 0 3px, transparent 3.5px);
+      background-size: 26px 26px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .panel > * {
+      position: relative;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid var(--ink);
+      border-radius: 14px;
+      background: var(--yellow);
+      box-shadow: var(--small-shadow);
+      transform: rotate(-4deg);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: 900;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hint {
+      font-size: 12px;
+      line-height: 1.35;
+      opacity: 0.82;
+      font-weight: 700;
+    }
+
+    input, select {
+      width: 100%;
+      border: 4px solid var(--ink);
+      border-radius: 14px;
+      background: #fffdf2;
+      padding: 13px 12px;
+      font-size: 18px;
+      font-weight: 900;
+      outline: none;
+      box-shadow: 4px 4px 0 rgba(16,19,34,0.88);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+
+    input:focus, select:focus {
+      background: #e0fbfc;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 rgba(16,19,34,0.88);
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 5px solid var(--ink);
+      border-radius: 18px;
+      padding: 14px 14px;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: 1000;
+      cursor: pointer;
+      box-shadow: var(--small-shadow);
+      color: var(--ink);
+      transition: transform 0.12s, box-shadow 0.12s, filter 0.12s;
+    }
+
+    button:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+      filter: saturate(1.15);
+    }
+
+    button:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0 0 0 var(--ink);
+    }
+
+    .primary { background: var(--pink); color: #fff; text-shadow: 2px 2px 0 var(--ink); }
+    .secondary { background: var(--lime); }
+
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .result-card {
+      border: 5px solid var(--ink);
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 178px;
+      box-shadow: var(--small-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card.bur {
+      background: linear-gradient(135deg, #9bf6ff, #1ea7ff);
+    }
+
+    .result-card.ddr {
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+    }
+
+    .result-card::after {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      right: -44px;
+      top: -42px;
+      border: 5px solid rgba(16,19,34,0.8);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+    }
+
+    .result-label {
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 13px;
+    }
+
+    .result-value {
+      display: block;
+      margin: 6px 0;
+      font-size: clamp(48px, 7vw, 74px);
+      line-height: 0.9;
+      font-weight: 1000;
+      letter-spacing: -0.08em;
+      text-shadow: 4px 4px 0 rgba(255,255,255,0.55);
+    }
+
+    .result-meaning {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .formula-box {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .formula {
+      border: 4px solid var(--ink);
+      border-radius: 16px;
+      background: #111827;
+      color: var(--lime);
+      padding: 14px;
+      font-family: 'Courier New', monospace;
+      font-weight: 900;
+      line-height: 1.5;
+      box-shadow: inset 0 0 20px rgba(166,255,77,0.18), var(--small-shadow);
+      overflow-x: auto;
+    }
+
+    .meter-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .meter {
+      border: 4px solid var(--ink);
+      border-radius: 16px;
+      background: #fffdf2;
+      padding: 12px;
+      box-shadow: var(--small-shadow);
+    }
+
+    .meter-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      height: 24px;
+      border: 4px solid var(--ink);
+      border-radius: 999px;
+      overflow: hidden;
+      background: linear-gradient(90deg, rgba(16,19,34,0.12), rgba(16,19,34,0.04));
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 20%;
+      border-right: 4px solid var(--ink);
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--pink));
+      transition: width 0.45s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .bubble-diagram {
+      min-height: 450px;
+      position: relative;
+      border: 5px solid var(--ink);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.9), transparent 12%),
+        linear-gradient(180deg, #e0fbfc, #8ecae6 55%, #59c173);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .bubble-diagram::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 66px;
+      transform: translateX(-50%);
+      width: var(--bubble-width, 190px);
+      height: 285px;
+      border: 6px solid var(--ink);
+      border-radius: 48% 48% 32% 32% / 54% 54% 22% 22%;
+      background:
+        radial-gradient(circle at 35% 20%, rgba(255,255,255,0.72), transparent 12%),
+        linear-gradient(90deg, rgba(255,255,255,0.40), rgba(255,255,255,0.10));
+      box-shadow: inset 0 0 30px rgba(255,255,255,0.65), var(--small-shadow);
+      transition: width 0.45s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .bubble-diagram::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      width: 170px;
+      height: 70px;
+      border: 6px solid var(--ink);
+      border-radius: 22px 22px 12px 12px;
+      background: linear-gradient(180deg, #6c757d, #2b2d42);
+      box-shadow: var(--small-shadow);
+    }
+
+    .nip {
+      position: absolute;
+      left: 50%;
+      top: 46px;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 54px;
+      border: 5px solid var(--ink);
+      border-radius: 16px;
+      background: linear-gradient(90deg, #495057, #adb5bd, #495057);
+      box-shadow: var(--small-shadow);
+      z-index: 2;
+    }
+
+    .nip::before, .nip::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 4px solid var(--ink);
+      background: var(--yellow);
+    }
+
+    .nip::before { left: 22px; }
+    .nip::after { right: 22px; }
+
+    .direction-arrow {
+      position: absolute;
+      font-weight: 1000;
+      border: 4px solid var(--ink);
+      background: var(--paper);
+      border-radius: 999px;
+      padding: 8px 12px;
+      box-shadow: var(--small-shadow);
+      z-index: 4;
+    }
+
+    .arrow-md {
+      left: 22px;
+      top: 124px;
+      background: var(--orange);
+    }
+
+    .arrow-td {
+      right: 22px;
+      top: 200px;
+      background: var(--blue);
+      color: #fff;
+      text-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .mini-readout {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 112px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      z-index: 4;
+    }
+
+    .readout-pill {
+      border: 4px solid var(--ink);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.86);
+      padding: 10px;
+      font-weight: 1000;
+      text-align: center;
+      box-shadow: var(--small-shadow);
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .info-card {
+      border: 5px solid var(--ink);
+      border-radius: 22px;
+      background: rgba(255, 253, 242, 0.94);
+      padding: 18px;
+      box-shadow: var(--small-shadow);
+      position: relative;
+      min-height: 210px;
+    }
+
+    .info-card:nth-child(1) { background: #caf0f8; }
+    .info-card:nth-child(2) { background: #fdffb6; }
+    .info-card:nth-child(3) { background: #ffc6ff; }
+
+    .info-card h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .info-card p, .info-card li {
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .info-card ul {
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: #fff;
+      padding: 6px 9px;
+      font-weight: 1000;
+      font-size: 12px;
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .log-panel {
+      margin-top: 22px;
+      border: 5px solid var(--ink);
+      border-radius: var(--radius);
+      background: #111827;
+      color: #d1fae5;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      font-family: 'Courier New', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .log-panel::before {
+      content: 'PROCESS HUD';
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      color: rgba(166,255,77,0.35);
+      font-weight: 1000;
+      letter-spacing: 0.18em;
+    }
+
+    .log-line {
+      margin: 6px 0;
+      font-weight: 800;
+    }
+
+    .footer {
+      margin: 28px 0 18px;
+      padding: 16px;
+      border: 5px solid var(--ink);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: var(--small-shadow);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .floating-token {
+      position: fixed;
+      border: 4px solid var(--ink);
+      border-radius: 18px;
+      background: var(--yellow);
+      box-shadow: var(--small-shadow);
+      z-index: 0;
+      opacity: 0.86;
+      pointer-events: none;
+      animation: tokenFloat var(--dur) ease-in-out infinite;
+    }
+
+    .floating-token::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 3px solid rgba(16,19,34,0.9);
+      border-radius: 12px;
+    }
+
+    @keyframes tokenFloat {
+      0%,100% { transform: translateY(0) rotate(var(--rot)); }
+      50% { transform: translateY(-22px) rotate(calc(var(--rot) + 12deg)); }
+    }
+    .token-1 {
+      left: 17%;
+      top: 31%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: -22deg;
+      --dur: 4.45s;
+      animation-delay: -0.17s;
+    }
+    .token-2 {
+      left: 34%;
+      top: 62%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: -9deg;
+      --dur: 4.90s;
+      animation-delay: -0.34s;
+    }
+    .token-3 {
+      left: 51%;
+      top: 3%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 4deg;
+      --dur: 5.35s;
+      animation-delay: -0.51s;
+    }
+    .token-4 {
+      left: 68%;
+      top: 34%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: 17deg;
+      --dur: 5.80s;
+      animation-delay: -0.68s;
+    }
+    .token-5 {
+      left: 85%;
+      top: 65%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: 30deg;
+      --dur: 6.25s;
+      animation-delay: -0.85s;
+    }
+    .token-6 {
+      left: 6%;
+      top: 6%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -27deg;
+      --dur: 6.70s;
+      animation-delay: -1.02s;
+    }
+    .token-7 {
+      left: 23%;
+      top: 37%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: -14deg;
+      --dur: 7.15s;
+      animation-delay: -1.19s;
+    }
+    .token-8 {
+      left: 40%;
+      top: 68%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: -1deg;
+      --dur: 7.60s;
+      animation-delay: -1.36s;
+    }
+    .token-9 {
+      left: 57%;
+      top: 9%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: 12deg;
+      --dur: 4.00s;
+      animation-delay: -1.53s;
+    }
+    .token-10 {
+      left: 74%;
+      top: 40%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: 25deg;
+      --dur: 4.45s;
+      animation-delay: -1.70s;
+    }
+    .token-11 {
+      left: 91%;
+      top: 71%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: -32deg;
+      --dur: 4.90s;
+      animation-delay: -1.87s;
+    }
+    .token-12 {
+      left: 12%;
+      top: 12%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: -19deg;
+      --dur: 5.35s;
+      animation-delay: -2.04s;
+    }
+    .token-13 {
+      left: 29%;
+      top: 43%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: -6deg;
+      --dur: 5.80s;
+      animation-delay: -2.21s;
+    }
+    .token-14 {
+      left: 46%;
+      top: 74%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: 7deg;
+      --dur: 6.25s;
+      animation-delay: -2.38s;
+    }
+    .token-15 {
+      left: 63%;
+      top: 15%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: 20deg;
+      --dur: 6.70s;
+      animation-delay: -2.55s;
+    }
+    .token-16 {
+      left: 80%;
+      top: 46%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: 33deg;
+      --dur: 7.15s;
+      animation-delay: -2.72s;
+    }
+    .token-17 {
+      left: 1%;
+      top: 77%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: -24deg;
+      --dur: 7.60s;
+      animation-delay: -2.89s;
+    }
+    .token-18 {
+      left: 18%;
+      top: 18%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: -11deg;
+      --dur: 4.00s;
+      animation-delay: -3.06s;
+    }
+    .token-19 {
+      left: 35%;
+      top: 49%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 2deg;
+      --dur: 4.45s;
+      animation-delay: -3.23s;
+    }
+    .token-20 {
+      left: 52%;
+      top: 80%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: 15deg;
+      --dur: 4.90s;
+      animation-delay: -3.40s;
+    }
+    .token-21 {
+      left: 69%;
+      top: 21%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: 28deg;
+      --dur: 5.35s;
+      animation-delay: -3.57s;
+    }
+    .token-22 {
+      left: 86%;
+      top: 52%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -29deg;
+      --dur: 5.80s;
+      animation-delay: -3.74s;
+    }
+    .token-23 {
+      left: 7%;
+      top: 83%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: -16deg;
+      --dur: 6.25s;
+      animation-delay: -3.91s;
+    }
+    .token-24 {
+      left: 24%;
+      top: 24%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: -3deg;
+      --dur: 6.70s;
+      animation-delay: -4.08s;
+    }
+    .token-25 {
+      left: 41%;
+      top: 55%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: 10deg;
+      --dur: 7.15s;
+      animation-delay: -4.25s;
+    }
+    .token-26 {
+      left: 58%;
+      top: 86%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: 23deg;
+      --dur: 7.60s;
+      animation-delay: -4.42s;
+    }
+    .token-27 {
+      left: 75%;
+      top: 27%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: -34deg;
+      --dur: 4.00s;
+      animation-delay: -4.59s;
+    }
+    .token-28 {
+      left: 92%;
+      top: 58%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: -21deg;
+      --dur: 4.45s;
+      animation-delay: -4.76s;
+    }
+    .token-29 {
+      left: 13%;
+      top: 89%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: -8deg;
+      --dur: 4.90s;
+      animation-delay: -4.93s;
+    }
+    .token-30 {
+      left: 30%;
+      top: 30%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: 5deg;
+      --dur: 5.35s;
+      animation-delay: -5.10s;
+    }
+    .token-31 {
+      left: 47%;
+      top: 61%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: 18deg;
+      --dur: 5.80s;
+      animation-delay: -5.27s;
+    }
+    .token-32 {
+      left: 64%;
+      top: 2%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: 31deg;
+      --dur: 6.25s;
+      animation-delay: -5.44s;
+    }
+    .token-33 {
+      left: 81%;
+      top: 33%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: -26deg;
+      --dur: 6.70s;
+      animation-delay: -5.61s;
+    }
+    .token-34 {
+      left: 2%;
+      top: 64%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: -13deg;
+      --dur: 7.15s;
+      animation-delay: -5.78s;
+    }
+    .token-35 {
+      left: 19%;
+      top: 5%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 0deg;
+      --dur: 7.60s;
+      animation-delay: -5.95s;
+    }
+    .token-36 {
+      left: 36%;
+      top: 36%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: 13deg;
+      --dur: 4.00s;
+      animation-delay: -6.12s;
+    }
+    .token-37 {
+      left: 53%;
+      top: 67%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: 26deg;
+      --dur: 4.45s;
+      animation-delay: -6.29s;
+    }
+    .token-38 {
+      left: 70%;
+      top: 8%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -31deg;
+      --dur: 4.90s;
+      animation-delay: -6.46s;
+    }
+    .token-39 {
+      left: 87%;
+      top: 39%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: -18deg;
+      --dur: 5.35s;
+      animation-delay: -6.63s;
+    }
+    .token-40 {
+      left: 8%;
+      top: 70%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: -5deg;
+      --dur: 5.80s;
+      animation-delay: -6.80s;
+    }
+    .token-41 {
+      left: 25%;
+      top: 11%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: 8deg;
+      --dur: 6.25s;
+      animation-delay: -6.97s;
+    }
+    .token-42 {
+      left: 42%;
+      top: 42%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: 21deg;
+      --dur: 6.70s;
+      animation-delay: -7.14s;
+    }
+    .token-43 {
+      left: 59%;
+      top: 73%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 34deg;
+      --dur: 7.15s;
+      animation-delay: -7.31s;
+    }
+    .token-44 {
+      left: 76%;
+      top: 14%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: -23deg;
+      --dur: 7.60s;
+      animation-delay: -7.48s;
+    }
+    .token-45 {
+      left: 93%;
+      top: 45%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: -10deg;
+      --dur: 4.00s;
+      animation-delay: -7.65s;
+    }
+    .token-46 {
+      left: 14%;
+      top: 76%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: 3deg;
+      --dur: 4.45s;
+      animation-delay: -7.82s;
+    }
+    .token-47 {
+      left: 31%;
+      top: 17%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: 16deg;
+      --dur: 4.90s;
+      animation-delay: -7.99s;
+    }
+    .token-48 {
+      left: 48%;
+      top: 48%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: 29deg;
+      --dur: 5.35s;
+      animation-delay: -8.16s;
+    }
+    .token-49 {
+      left: 65%;
+      top: 79%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: -28deg;
+      --dur: 5.80s;
+      animation-delay: -8.33s;
+    }
+    .token-50 {
+      left: 82%;
+      top: 20%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: -15deg;
+      --dur: 6.25s;
+      animation-delay: -8.50s;
+    }
+    .token-51 {
+      left: 3%;
+      top: 51%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: -2deg;
+      --dur: 6.70s;
+      animation-delay: -8.67s;
+    }
+    .token-52 {
+      left: 20%;
+      top: 82%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: 11deg;
+      --dur: 7.15s;
+      animation-delay: -8.84s;
+    }
+    .token-53 {
+      left: 37%;
+      top: 23%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: 24deg;
+      --dur: 7.60s;
+      animation-delay: -9.01s;
+    }
+    .token-54 {
+      left: 54%;
+      top: 54%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -33deg;
+      --dur: 4.00s;
+      animation-delay: -9.18s;
+    }
+    .token-55 {
+      left: 71%;
+      top: 85%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: -20deg;
+      --dur: 4.45s;
+      animation-delay: -9.35s;
+    }
+    .token-56 {
+      left: 88%;
+      top: 26%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: -7deg;
+      --dur: 4.90s;
+      animation-delay: -9.52s;
+    }
+    .token-57 {
+      left: 9%;
+      top: 57%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: 6deg;
+      --dur: 5.35s;
+      animation-delay: -9.69s;
+    }
+    .token-58 {
+      left: 26%;
+      top: 88%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: 19deg;
+      --dur: 5.80s;
+      animation-delay: -9.86s;
+    }
+    .token-59 {
+      left: 43%;
+      top: 29%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 32deg;
+      --dur: 6.25s;
+      animation-delay: -10.03s;
+    }
+    .token-60 {
+      left: 60%;
+      top: 60%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: -25deg;
+      --dur: 6.70s;
+      animation-delay: -10.20s;
+    }
+    .token-61 {
+      left: 77%;
+      top: 1%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: -12deg;
+      --dur: 7.15s;
+      animation-delay: -10.37s;
+    }
+    .token-62 {
+      left: 94%;
+      top: 32%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: 1deg;
+      --dur: 7.60s;
+      animation-delay: -10.54s;
+    }
+    .token-63 {
+      left: 15%;
+      top: 63%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: 14deg;
+      --dur: 4.00s;
+      animation-delay: -10.71s;
+    }
+    .token-64 {
+      left: 32%;
+      top: 4%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: 27deg;
+      --dur: 4.45s;
+      animation-delay: -10.88s;
+    }
+    .token-65 {
+      left: 49%;
+      top: 35%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: -30deg;
+      --dur: 4.90s;
+      animation-delay: -11.05s;
+    }
+    .token-66 {
+      left: 66%;
+      top: 66%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: -17deg;
+      --dur: 5.35s;
+      animation-delay: -11.22s;
+    }
+    .token-67 {
+      left: 83%;
+      top: 7%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: -4deg;
+      --dur: 5.80s;
+      animation-delay: -11.39s;
+    }
+    .token-68 {
+      left: 4%;
+      top: 38%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: 9deg;
+      --dur: 6.25s;
+      animation-delay: -11.56s;
+    }
+    .token-69 {
+      left: 21%;
+      top: 69%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: 22deg;
+      --dur: 6.70s;
+      animation-delay: -11.73s;
+    }
+    .token-70 {
+      left: 38%;
+      top: 10%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -35deg;
+      --dur: 7.15s;
+      animation-delay: -11.90s;
+    }
+    .token-71 {
+      left: 55%;
+      top: 41%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: -22deg;
+      --dur: 7.60s;
+      animation-delay: -12.07s;
+    }
+    .token-72 {
+      left: 72%;
+      top: 72%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: -9deg;
+      --dur: 4.00s;
+      animation-delay: -12.24s;
+    }
+    .token-73 {
+      left: 89%;
+      top: 13%;
+      width: 22px;
+      height: 22px;
+      background: var(--pink);
+      --rot: 4deg;
+      --dur: 4.45s;
+      animation-delay: -12.41s;
+    }
+    .token-74 {
+      left: 10%;
+      top: 44%;
+      width: 26px;
+      height: 26px;
+      background: var(--blue);
+      --rot: 17deg;
+      --dur: 4.90s;
+      animation-delay: -12.58s;
+    }
+    .token-75 {
+      left: 27%;
+      top: 75%;
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      --rot: 30deg;
+      --dur: 5.35s;
+      animation-delay: -12.75s;
+    }
+    .token-76 {
+      left: 44%;
+      top: 16%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      --rot: -27deg;
+      --dur: 5.80s;
+      animation-delay: -12.92s;
+    }
+    .token-77 {
+      left: 61%;
+      top: 47%;
+      width: 38px;
+      height: 38px;
+      background: var(--lime);
+      --rot: -14deg;
+      --dur: 6.25s;
+      animation-delay: -13.09s;
+    }
+    .token-78 {
+      left: 78%;
+      top: 78%;
+      width: 42px;
+      height: 42px;
+      background: var(--purple);
+      --rot: -1deg;
+      --dur: 6.70s;
+      animation-delay: -13.26s;
+    }
+    .token-79 {
+      left: 95%;
+      top: 19%;
+      width: 46px;
+      height: 46px;
+      background: #fff;
+      --rot: 12deg;
+      --dur: 7.15s;
+      animation-delay: -13.43s;
+    }
+    .token-80 {
+      left: 16%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      background: var(--yellow);
+      --rot: 25deg;
+      --dur: 7.60s;
+      animation-delay: -13.60s;
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .spark {
+      position: absolute;
+      width: 10px;
+      height: 18px;
+      border: 2px solid var(--ink);
+      background: var(--yellow);
+      opacity: 0;
+      animation: sparkFall 0.9s ease-out forwards;
+    }
+
+    @keyframes sparkFall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(120px) rotate(280deg); opacity: 0; }
+    }
+
+    .reference-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: 12px;
+    }
+
+    .reference-table th, .reference-table td {
+      padding: 12px;
+      border-top: 4px solid var(--ink);
+      border-bottom: 4px solid var(--ink);
+      background: #fffdf2;
+      font-size: 14px;
+      font-weight: 800;
+      vertical-align: top;
+    }
+
+    .reference-table th:first-child, .reference-table td:first-child {
+      border-left: 4px solid var(--ink);
+      border-radius: 14px 0 0 14px;
+    }
+
+    .reference-table th:last-child, .reference-table td:last-child {
+      border-right: 4px solid var(--ink);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .reference-table th {
+      background: var(--blue);
+      color: #fff;
+      text-shadow: 2px 2px 0 var(--ink);
+      text-transform: uppercase;
+    }
+
+    .compact-note {
+      margin-top: 12px;
+      padding: 12px;
+      border: 4px dashed var(--ink);
+      border-radius: 16px;
+      background: rgba(255, 225, 86, 0.7);
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 920px) {
+      .hero-inner, .layout, .analysis-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .console {
+        min-height: 230px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .world { padding: 10px; }
+      .main-shell { width: calc(100vw - 20px); }
+      .hero, .panel { padding: 16px; }
+      .action-row { grid-template-columns: 1fr; }
+      .mini-readout { grid-template-columns: 1fr; }
+      .direction-arrow { font-size: 12px; }
+      .arrow-md { top: 118px; }
+      .arrow-td { top: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="world">
+    <div class="sky-grid"></div>
+    <div class="sun-disc" aria-hidden="true"></div>
+    <div class="leaf leaf-1" aria-hidden="true"></div>
+    <div class="leaf leaf-2" aria-hidden="true"></div>
+    <div class="leaf leaf-3" aria-hidden="true"></div>
+    <div class="leaf leaf-4" aria-hidden="true"></div>
+    <div class="leaf leaf-5" aria-hidden="true"></div>
+    <div class="leaf leaf-6" aria-hidden="true"></div>
+    <div class="leaf leaf-7" aria-hidden="true"></div>
+    <div class="leaf leaf-8" aria-hidden="true"></div>
+    <div class="leaf leaf-9" aria-hidden="true"></div>
+    <div class="leaf leaf-10" aria-hidden="true"></div>
+    <div class="leaf leaf-11" aria-hidden="true"></div>
+    <div class="leaf leaf-12" aria-hidden="true"></div>
+    <div class="floating-token token-1" aria-hidden="true"></div>
+    <div class="floating-token token-2" aria-hidden="true"></div>
+    <div class="floating-token token-3" aria-hidden="true"></div>
+    <div class="floating-token token-4" aria-hidden="true"></div>
+    <div class="floating-token token-5" aria-hidden="true"></div>
+    <div class="floating-token token-6" aria-hidden="true"></div>
+    <div class="floating-token token-7" aria-hidden="true"></div>
+    <div class="floating-token token-8" aria-hidden="true"></div>
+    <div class="floating-token token-9" aria-hidden="true"></div>
+    <div class="floating-token token-10" aria-hidden="true"></div>
+    <div class="floating-token token-11" aria-hidden="true"></div>
+    <div class="floating-token token-12" aria-hidden="true"></div>
+    <div class="floating-token token-13" aria-hidden="true"></div>
+    <div class="floating-token token-14" aria-hidden="true"></div>
+    <div class="floating-token token-15" aria-hidden="true"></div>
+    <div class="floating-token token-16" aria-hidden="true"></div>
+    <div class="floating-token token-17" aria-hidden="true"></div>
+    <div class="floating-token token-18" aria-hidden="true"></div>
+    <div class="floating-token token-19" aria-hidden="true"></div>
+    <div class="floating-token token-20" aria-hidden="true"></div>
+    <div class="floating-token token-21" aria-hidden="true"></div>
+    <div class="floating-token token-22" aria-hidden="true"></div>
+    <div class="floating-token token-23" aria-hidden="true"></div>
+    <div class="floating-token token-24" aria-hidden="true"></div>
+    <div class="floating-token token-25" aria-hidden="true"></div>
+    <div class="floating-token token-26" aria-hidden="true"></div>
+    <div class="floating-token token-27" aria-hidden="true"></div>
+    <div class="floating-token token-28" aria-hidden="true"></div>
+    <div class="floating-token token-29" aria-hidden="true"></div>
+    <div class="floating-token token-30" aria-hidden="true"></div>
+    <div class="floating-token token-31" aria-hidden="true"></div>
+    <div class="floating-token token-32" aria-hidden="true"></div>
+    <div class="floating-token token-33" aria-hidden="true"></div>
+    <div class="floating-token token-34" aria-hidden="true"></div>
+    <div class="floating-token token-35" aria-hidden="true"></div>
+    <div class="floating-token token-36" aria-hidden="true"></div>
+    <div class="floating-token token-37" aria-hidden="true"></div>
+    <div class="floating-token token-38" aria-hidden="true"></div>
+    <div class="floating-token token-39" aria-hidden="true"></div>
+    <div class="floating-token token-40" aria-hidden="true"></div>
+    <div class="floating-token token-41" aria-hidden="true"></div>
+    <div class="floating-token token-42" aria-hidden="true"></div>
+    <div class="floating-token token-43" aria-hidden="true"></div>
+    <div class="floating-token token-44" aria-hidden="true"></div>
+    <div class="floating-token token-45" aria-hidden="true"></div>
+    <div class="floating-token token-46" aria-hidden="true"></div>
+    <div class="floating-token token-47" aria-hidden="true"></div>
+    <div class="floating-token token-48" aria-hidden="true"></div>
+    <div class="floating-token token-49" aria-hidden="true"></div>
+    <div class="floating-token token-50" aria-hidden="true"></div>
+    <div class="floating-token token-51" aria-hidden="true"></div>
+    <div class="floating-token token-52" aria-hidden="true"></div>
+    <div class="floating-token token-53" aria-hidden="true"></div>
+    <div class="floating-token token-54" aria-hidden="true"></div>
+    <div class="floating-token token-55" aria-hidden="true"></div>
+    <div class="floating-token token-56" aria-hidden="true"></div>
+    <div class="floating-token token-57" aria-hidden="true"></div>
+    <div class="floating-token token-58" aria-hidden="true"></div>
+    <div class="floating-token token-59" aria-hidden="true"></div>
+    <div class="floating-token token-60" aria-hidden="true"></div>
+    <div class="floating-token token-61" aria-hidden="true"></div>
+    <div class="floating-token token-62" aria-hidden="true"></div>
+    <div class="floating-token token-63" aria-hidden="true"></div>
+    <div class="floating-token token-64" aria-hidden="true"></div>
+    <div class="floating-token token-65" aria-hidden="true"></div>
+    <div class="floating-token token-66" aria-hidden="true"></div>
+    <div class="floating-token token-67" aria-hidden="true"></div>
+    <div class="floating-token token-68" aria-hidden="true"></div>
+    <div class="floating-token token-69" aria-hidden="true"></div>
+    <div class="floating-token token-70" aria-hidden="true"></div>
+    <div class="floating-token token-71" aria-hidden="true"></div>
+    <div class="floating-token token-72" aria-hidden="true"></div>
+    <div class="floating-token token-73" aria-hidden="true"></div>
+    <div class="floating-token token-74" aria-hidden="true"></div>
+    <div class="floating-token token-75" aria-hidden="true"></div>
+    <div class="floating-token token-76" aria-hidden="true"></div>
+    <div class="floating-token token-77" aria-hidden="true"></div>
+    <div class="floating-token token-78" aria-hidden="true"></div>
+    <div class="floating-token token-79" aria-hidden="true"></div>
+    <div class="floating-token token-80" aria-hidden="true"></div>
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+    <main class="main-shell">
+      <section class="hero">
+        <div class="hero-inner">
+          <div>
+            <div class="kicker"><span class="kicker-dot"></span> Laboratório de Filme Soprado</div>
+            <h1>BUR<br>DDR</h1>
+            <p>
+              Calculadora visual para entender duas razões de processo em embalagens flexíveis: 
+              a expansão transversal do balão e o estiramento longitudinal do filme.
+            </p>
+          </div>
+          <div class="console" aria-hidden="true">
+            <div class="console-screen" id="consoleScreen">
+              &gt; DADOS CARREGADOS<br>
+              &gt; LARGURA: 1200 mm<br>
+              &gt; MATRIZ: 350 mm<br>
+              &gt; SISTEMA: PRONTO
+            </div>
+            <div class="console-buttons">
+              <span class="button-dot"></span>
+              <span class="button-dot"></span>
+              <span class="button-dot"></span>
+              <span class="button-dot"></span>
+            </div>
+            <div class="antenna"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout">
+        <div class="panel">
+          <h2 class="panel-title"><span class="badge">01</span> Parâmetros</h2>
+          <div class="form-grid">
+            <div class="field">
+              <label for="largura">Largura achatada do balão (mm)</label>
+              <input id="largura" type="number" value="1200" min="0" step="0.01" />
+              <div class="hint">Também chamada de layflat width. No seu exemplo: 1200 mm.</div>
+            </div>
+            <div class="field">
+              <label for="diametro">Diâmetro da matriz (mm)</label>
+              <input id="diametro" type="number" value="350" min="0" step="0.01" />
+              <div class="hint">Diâmetro da matriz circular. No seu exemplo: 350 mm.</div>
+            </div>
+            <div class="field">
+              <label for="abertura">Abertura da matriz / die gap (mm)</label>
+              <input id="abertura" type="number" value="1.50" min="0" step="0.01" />
+              <div class="hint">Valor ajustável. Troque para a abertura real da sua matriz.</div>
+            </div>
+            <div class="field">
+              <label for="espessura">Espessura final por parede (micras)</label>
+              <input id="espessura" type="number" value="25" min="0" step="0.01" />
+              <div class="hint">Espessura de uma parede do filme. No seu exemplo: 25 micras.</div>
+            </div>
+          </div>
+          <div class="action-row">
+            <button class="primary" id="calcBtn" type="button">Calcular</button>
+            <button class="secondary" id="resetBtn" type="button">Voltar ao exemplo</button>
+          </div>
+
+          <div class="results">
+            <div class="result-card bur">
+              <div class="result-label">BUR / Razão de sopro</div>
+              <span class="result-value" id="burValue">--</span>
+              <div class="result-meaning" id="burMeaning">Expansão do balão em relação à matriz.</div>
+            </div>
+            <div class="result-card ddr">
+              <div class="result-label">DDR / Razão de estiramento</div>
+              <span class="result-value" id="ddrValue">--</span>
+              <div class="result-meaning" id="ddrMeaning">Puxamento longitudinal relativo à espessura final.</div>
+            </div>
+          </div>
+
+          <div class="formula-box">
+            <div class="formula" id="burFormula">BUR = (largura achatada × 2) / (π × diâmetro da matriz)</div>
+            <div class="formula" id="ddrFormula">DDR = abertura da matriz / (espessura final × BUR)</div>
+          </div>
+        </div>
+
+        <aside class="bubble-diagram" id="bubbleDiagram">
+          <div class="nip"></div>
+          <div class="direction-arrow arrow-md">MD / direção máquina ↑</div>
+          <div class="direction-arrow arrow-td">TD / direção transversal ↔</div>
+          <div class="mini-readout">
+            <div class="readout-pill">BUR: <span id="miniBur">--</span></div>
+            <div class="readout-pill">DDR: <span id="miniDdr">--</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel" style="margin-top:22px;">
+        <h2 class="panel-title"><span class="badge">02</span> O que cada razão indica no filme</h2>
+        <div class="analysis-grid">
+          <article class="info-card">
+            <h3>BUR</h3>
+            <p>
+              O BUR representa quanto o balão expandiu lateralmente em relação à matriz. 
+              Ele é uma leitura geométrica da expansão transversal.
+            </p>
+            <ul>
+              <li>Impacta orientação em TD.</li>
+              <li>Afeta largura, estabilidade do balão e perfil de espessura.</li>
+              <li>Também se relaciona com propriedades como rasgo, impacto, brilho e planicidade.</li>
+            </ul>
+            <div class="chip-row">
+              <span class="chip">TD</span>
+              <span class="chip">largura</span>
+              <span class="chip">balão</span>
+            </div>
+          </article>
+          <article class="info-card">
+            <h3>DDR</h3>
+            <p>
+              O DDR representa a redução de espessura por puxamento depois da expansão do balão. 
+              É uma leitura do drawdown longitudinal.
+            </p>
+            <ul>
+              <li>Impacta orientação em MD.</li>
+              <li>Depende de abertura da matriz, espessura final e BUR.</li>
+              <li>DDR alto tende a aumentar orientação longitudinal e pode alterar resistência e alongamento.</li>
+            </ul>
+            <div class="chip-row">
+              <span class="chip">MD</span>
+              <span class="chip">tração</span>
+              <span class="chip">espessura</span>
+            </div>
+          </article>
+          <article class="info-card">
+            <h3>Balanceamento</h3>
+            <p>
+              O filme não responde só a um número. BUR e DDR atuam juntos, abaixo da linha de névoa, 
+              junto com resina, temperatura, resfriamento, produção e estabilidade de bolha.
+            </p>
+            <ul>
+              <li>Mais BUR não é automaticamente melhor.</li>
+              <li>Mais DDR não é automaticamente melhor.</li>
+              <li>O alvo é estabilidade de processo + propriedade final.</li>
+            </ul>
+            <div class="chip-row">
+              <span class="chip">processo</span>
+              <span class="chip">orientação</span>
+              <span class="chip">qualidade</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top:22px;">
+        <h2 class="panel-title"><span class="badge">03</span> Leitura técnica rápida</h2>
+        <table class="reference-table">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>O que aumenta</th>
+              <th>Possível efeito no filme</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>BUR maior</strong></td>
+              <td>Expansão transversal do balão</td>
+              <td>Mais orientação em TD, maior largura, possível redução de espessura se o restante não for compensado.</td>
+            </tr>
+            <tr>
+              <td><strong>DDR maior</strong></td>
+              <td>Estiramento longitudinal</td>
+              <td>Mais orientação em MD, maior sensibilidade em tração/rasgo/alongamento nessa direção.</td>
+            </tr>
+            <tr>
+              <td><strong>Die gap maior</strong></td>
+              <td>Espessura inicial do tubo fundido</td>
+              <td>Pode elevar DDR calculado se espessura final e BUR forem mantidos.</td>
+            </tr>
+            <tr>
+              <td><strong>Espessura final menor</strong></td>
+              <td>Redução total de espessura</td>
+              <td>Aumenta DDR calculado, desde que abertura e BUR sejam iguais.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="compact-note">
+          Use esses números como indicadores de orientação geométrica. Eles não substituem ensaio físico do filme.
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top:22px;">
+        <h2 class="panel-title"><span class="badge">04</span> Medidores visuais</h2>
+        <div class="meter-stack">
+          <div class="meter">
+            <div class="meter-head"><span>Expansão transversal estimada</span><span id="burMeterLabel">--</span></div>
+            <div class="bar"><div class="bar-fill" id="burMeter"></div></div>
+          </div>
+          <div class="meter">
+            <div class="meter-head"><span>Estiramento longitudinal estimado</span><span id="ddrMeterLabel">--</span></div>
+            <div class="bar"><div class="bar-fill" id="ddrMeter"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="log-panel" id="logPanel">
+        <div class="log-line">&gt; Aguardando cálculo...</div>
+      </section>
+
+      <footer class="footer">
+        Visual retrô tropical e sci-fi feito com HTML, CSS e JavaScript puro. Sem imagens externas.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const defaults = {
+      largura: 1200,
+      diametro: 350,
+      abertura: 1.50,
+      espessura: 25
+    };
+
+    const el = {
+      largura: document.getElementById('largura'),
+      diametro: document.getElementById('diametro'),
+      abertura: document.getElementById('abertura'),
+      espessura: document.getElementById('espessura'),
+      calcBtn: document.getElementById('calcBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      burValue: document.getElementById('burValue'),
+      ddrValue: document.getElementById('ddrValue'),
+      burMeaning: document.getElementById('burMeaning'),
+      ddrMeaning: document.getElementById('ddrMeaning'),
+      burFormula: document.getElementById('burFormula'),
+      ddrFormula: document.getElementById('ddrFormula'),
+      miniBur: document.getElementById('miniBur'),
+      miniDdr: document.getElementById('miniDdr'),
+      bubbleDiagram: document.getElementById('bubbleDiagram'),
+      burMeter: document.getElementById('burMeter'),
+      ddrMeter: document.getElementById('ddrMeter'),
+      burMeterLabel: document.getElementById('burMeterLabel'),
+      ddrMeterLabel: document.getElementById('ddrMeterLabel'),
+      logPanel: document.getElementById('logPanel'),
+      consoleScreen: document.getElementById('consoleScreen'),
+      confettiLayer: document.getElementById('confettiLayer')
+    };
+
+    function numberFrom(input) {
+      return Number(String(input.value).replace(',', '.'));
+    }
+
+    function fmt(value, digits = 2) {
+      if (!Number.isFinite(value)) return '--';
+      return value.toFixed(digits).replace('.', ',');
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function burText(bur) {
+      if (bur < 1) return 'Valor inválido para filme soprado estável.';
+      if (bur < 1.8) return 'BUR baixo: pouca expansão transversal relativa.';
+      if (bur <= 3.5) return 'BUR típico/moderado para muitos filmes PEBD/PELBD.';
+      if (bur <= 4.5) return 'BUR alto: exige boa estabilidade de balão e controle de espessura.';
+      return 'BUR muito alto: pode ser específico do material/processo e exige validação cuidadosa.';
+    }
+
+    function ddrText(ddr) {
+      if (ddr < 1) return 'Valor inválido: sem redução longitudinal real calculada.';
+      if (ddr < 10) return 'DDR baixo/moderado: menor drawdown longitudinal relativo.';
+      if (ddr <= 30) return 'DDR médio/alto: drawdown longitudinal relevante.';
+      if (ddr <= 60) return 'DDR alto: forte redução de espessura por puxamento.';
+      return 'DDR muito alto: verifique abertura, espessura e estabilidade do processo.';
+    }
+
+    function addLog(lines) {
+      el.logPanel.innerHTML = '';
+      lines.forEach((line) => {
+        const div = document.createElement('div');
+        div.className = 'log-line';
+        div.textContent = line;
+        el.logPanel.appendChild(div);
+      });
+    }
+
+    function burstConfetti() {
+      const colors = ['#ffe156', '#ff3fa4', '#1ea7ff', '#32d583', '#ff9f1c', '#a6ff4d'];
+      for (let i = 0; i < 28; i++) {
+        const spark = document.createElement('span');
+        spark.className = 'spark';
+        spark.style.left = (35 + Math.random() * 30) + '%';
+        spark.style.top = (16 + Math.random() * 18) + '%';
+        spark.style.background = colors[i % colors.length];
+        spark.style.animationDelay = (Math.random() * 0.18) + 's';
+        spark.style.transform = 'rotate(' + Math.round(Math.random() * 360) + 'deg)';
+        el.confettiLayer.appendChild(spark);
+        setTimeout(() => spark.remove(), 1300);
+      }
+    }
+
+    function calculate() {
+      const largura = numberFrom(el.largura);
+      const diametro = numberFrom(el.diametro);
+      const abertura = numberFrom(el.abertura);
+      const espessuraMicras = numberFrom(el.espessura);
+
+      if (largura <= 0 || diametro <= 0 || abertura <= 0 || espessuraMicras <= 0) {
+        el.burValue.textContent = 'Erro';
+        el.ddrValue.textContent = 'Erro';
+        addLog([
+          '> ERRO: todos os campos precisam ser maiores que zero.',
+          '> Verifique largura, diâmetro, abertura e espessura.'
+        ]);
+        return;
+      }
+
+      const bur = (largura * 2) / (Math.PI * diametro);
+      const espessuraMm = espessuraMicras / 1000;
+      const ddr = abertura / (espessuraMm * bur);
+
+      el.burValue.textContent = fmt(bur, 2);
+      el.ddrValue.textContent = fmt(ddr, 2);
+      el.miniBur.textContent = fmt(bur, 2);
+      el.miniDdr.textContent = fmt(ddr, 2);
+
+      el.burMeaning.textContent = burText(bur);
+      el.ddrMeaning.textContent = ddrText(ddr);
+
+      el.burFormula.textContent =
+        'BUR = (' + fmt(largura, 2) + ' × 2) / (π × ' + fmt(diametro, 2) + ') = ' + fmt(bur, 4);
+
+      el.ddrFormula.textContent =
+        'DDR = ' + fmt(abertura, 3) + ' / (' + fmt(espessuraMm, 4) + ' × ' + fmt(bur, 4) + ') = ' + fmt(ddr, 4);
+
+      const bubbleWidth = clamp(80 + bur * 55, 130, 340);
+      el.bubbleDiagram.style.setProperty('--bubble-width', bubbleWidth + 'px');
+
+      const burPercent = clamp((bur / 4.5) * 100, 8, 100);
+      const ddrPercent = clamp((ddr / 60) * 100, 8, 100);
+      el.burMeter.style.width = burPercent + '%';
+      el.ddrMeter.style.width = ddrPercent + '%';
+      el.burMeterLabel.textContent = fmt(bur, 2);
+      el.ddrMeterLabel.textContent = fmt(ddr, 2);
+
+      el.consoleScreen.innerHTML =
+        '&gt; CÁLCULO OK<br>' +
+        '&gt; BUR: ' + fmt(bur, 2) + '<br>' +
+        '&gt; DDR: ' + fmt(ddr, 2) + '<br>' +
+        '&gt; BALÃO ATUALIZADO';
+
+      addLog([
+        '> BUR indica expansão transversal do balão em relação à matriz.',
+        '> DDR indica drawdown: abertura da matriz dividida pela espessura final corrigida pelo BUR.',
+        '> BUR calculado: ' + fmt(bur, 4),
+        '> DDR calculado: ' + fmt(ddr, 4),
+        '> Interpretação BUR: ' + burText(bur),
+        '> Interpretação DDR: ' + ddrText(ddr)
+      ]);
+
+      burstConfetti();
+    }
+
+    function resetDefaults() {
+      el.largura.value = defaults.largura;
+      el.diametro.value = defaults.diametro;
+      el.abertura.value = defaults.abertura.toFixed(2);
+      el.espessura.value = defaults.espessura;
+      calculate();
+    }
+
+    el.calcBtn.addEventListener('click', calculate);
+    el.resetBtn.addEventListener('click', resetDefaults);
+
+    [el.largura, el.diametro, el.abertura, el.espessura].forEach((input) => {
+      input.addEventListener('input', calculate);
+    });
+
+    calculate();
+  </script>
+</body>
+</html>
